@@ -1,10 +1,36 @@
-version: '3'
 services:
-  postgres:
-    image: 'postgres:9.6.1'
+  typescript:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
     ports:
-      - '5432:5432'
+      - '3002:3002'
     environment:
-      POSTGRES_USER: 'test'
-      POSTGRES_PASSWORD: 'test'
-      POSTGRES_DB: 'test'
+      - TYPEORM_HOST=db_postgres
+      - TYPEORM_PORT=${TYPEORM_PORT}
+      - TYPEORM_USERNAME=${TYPEORM_USERNAME}
+      - TYPEORM_PASSWORD=${TYPEORM_PASSWORD}
+      - TYPEORM_DATABASE=${TYPEORM_DATABASE}
+    networks:
+      - backend
+    depends_on:
+      - db_postgres
+  db_postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: ${TYPEORM_USERNAME}
+      POSTGRES_PASSWORD: ${TYPEORM_PASSWORD}
+      POSTGRES_DB: ${TYPEORM_DATABASE}
+    networks:
+      - backend
+    ports:
+      - ${TYPEORM_PORT}:${TYPEORM_PORT}
+    volumes:
+      - api_db_data:/var/lib/postgresql/data
+networks:
+  backend:
+volumes:
+  api_db_data:
