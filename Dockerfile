@@ -1,11 +1,11 @@
-FROM node:16.13
+FROM node:16-alpine As development
 
 WORKDIR /usr/src/app
 
 COPY package*.json ./
 
-RUN npm install --force 
+RUN yarn
 
 COPY . .
 
-CMD ["npm", "run", "start:dev"]
+CMD ["yarn", "start:dev"]

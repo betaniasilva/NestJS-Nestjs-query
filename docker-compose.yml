@@ -1,5 +1,5 @@
 services:
-  typescript:
+  nest_api:
     build:
       context: .
       dockerfile: Dockerfile
@@ -7,30 +7,31 @@ services:
       - .:/usr/src/app
       - /usr/src/app/node_modules
     ports:
-      - '3002:3002'
+      - ${API_PORT}:${API_PORT}
     environment:
       - TYPEORM_HOST=db_postgres
       - TYPEORM_PORT=${TYPEORM_PORT}
       - TYPEORM_USERNAME=${TYPEORM_USERNAME}
       - TYPEORM_PASSWORD=${TYPEORM_PASSWORD}
       - TYPEORM_DATABASE=${TYPEORM_DATABASE}
+      - API_PORT=${API_PORT}
     networks:
-      - backend
+      - docker-network
     depends_on:
       - db_postgres
   db_postgres:
-    image: postgres:13
+    image: postgres:13-alpine
     environment:
       POSTGRES_USER: ${TYPEORM_USERNAME}
       POSTGRES_PASSWORD: ${TYPEORM_PASSWORD}
       POSTGRES_DB: ${TYPEORM_DATABASE}
     networks:
-      - backend
+      - docker-network
     ports:
       - ${TYPEORM_PORT}:${TYPEORM_PORT}
     volumes:
       - api_db_data:/var/lib/postgresql/data
 networks:
-  backend:
+  docker-network:
 volumes:
   api_db_data:
