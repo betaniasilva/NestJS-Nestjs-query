@@ -4,8 +4,8 @@ WORKDIR /usr/src/app
 
 COPY package*.json ./
 
-RUN yarn
+RUN npm i --force 
 
 COPY . .
 
-CMD ["yarn", "start:dev"]
+CMD ["npm", "run", "start:dev"]
