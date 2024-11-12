@@ -51,7 +51,7 @@ $ npm install
 ### Executando a aplicação
 
 ```bash
-$ yarn start:dev
+$ npm run start:dev
 ```
 
 ## 🤝 Contribuídores
